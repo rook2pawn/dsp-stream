@@ -45,19 +45,24 @@ setInterval(function() {
 
 var chart = new Chart;
 var datasource = new ee;
-chart.color.line = ['#FF0000','#FF0000'];
-chart.series(datasource);
-chart.to(document.getElementById('c1'));
-
-var chart2 = new Chart;
 var datasource2 = new ee;
-chart2.color.line = ['#FF0000','#FF0000'];
-chart2.series(datasource2);
-chart2.to(document.getElementById('c2'));
+//chart.color.line = ['#FF0000','#0033FF'];
+chart.color.grid = '#c9d6de'; // a pleasant grid
+chart.color.xlabel = '#FFF'; // the color of the x-axis labels
+chart.color.xline = '#FFF'; // the color the x-axis line
+chart.color.ylabel = '#FFF'
+chart.color.yline = '#FFF';
+chart.color.interactionline = '#FFF';
+chart.series(datasource);
+chart.series(datasource2);
+chart.color.bg = '#000000';
+chart.to(document.getElementById('c1'));
+chart.legend(document.getElementById('legend'));
+
 
 x.pipe(through(
     function write(data) {
-        datasource.emit('data',{y:data});
+        datasource.emit('data',{noisy:data});
     },
     function end() {
         this.queue(null);
@@ -66,7 +71,7 @@ x.pipe(through(
 
 x.pipe(dsp('boxcar')).pipe(through(
     function write(data) {
-        datasource2.emit('data',{y:data});
+        datasource2.emit('data',{cleaner:data});
     },
     function end() {
         this.queue(null);
